@@ -802,7 +802,12 @@ class Game {
   }
 
   focusInput() {
-    setTimeout(() => this.els.hiddenInput.focus(), 50);
+    const input = this.els.hiddenInput;
+    input.value = "";
+    input.focus();
+    // iOSではsetTimeoutの中でのfocusも試す
+    setTimeout(() => { input.value = ""; input.focus(); }, 50);
+    setTimeout(() => { input.value = ""; input.focus(); }, 300);
   }
 }
 
@@ -816,25 +821,33 @@ document.addEventListener("DOMContentLoaded", () => {
     speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
   }
 
+  // iOS対応: ボタンクリック（ユーザーアクション）の中でフォーカスを設定
+  const focusAndStart = (reviewWords) => {
+    hiddenInput.focus(); // ユーザーアクションのコンテキスト内でフォーカス（iOS必須）
+    game.start(reviewWords);
+  };
+
   // スタートボタン
   document.getElementById("startBtn").addEventListener("click", () => {
-    game.start();
+    focusAndStart();
   });
 
   // にがて問題を練習するボタン
   document.getElementById("retryBtn").addEventListener("click", () => {
     const reviewWords = game.getReviewWords();
-    game.start(reviewWords);
+    focusAndStart(reviewWords);
   });
 
   // 全問チャレンジボタン
   document.getElementById("fullRetryBtn").addEventListener("click", () => {
-    game.start();
+    focusAndStart();
   });
 
   // 入力キャプチャ（PC: documentレベルのkeydown / モバイル: hiddenInput）
   const hiddenInput = document.getElementById("hiddenInput");
+  const tapHint = document.getElementById("tapHint");
   let isGameScreen = false;
+  let isComposing = false; // IME変換中フラグ
 
   // ゲーム画面の表示状態を監視
   const observer = new MutationObserver(() => {
@@ -851,21 +864,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // モバイル向け: IME変換を追跡
+  hiddenInput.addEventListener("compositionstart", () => { isComposing = true; });
+  hiddenInput.addEventListener("compositionend", (e) => {
+    isComposing = false;
+    // IME確定時、確定文字列から英字を処理
+    const text = e.data || "";
+    for (const ch of text) {
+      if (/^[a-zA-Z ]$/.test(ch)) {
+        game.handleKeypress(ch.toLowerCase());
+      }
+    }
+    hiddenInput.value = "";
+  });
+
   // モバイル向け: hiddenInputのinputイベント
   hiddenInput.addEventListener("input", (e) => {
-    const value = e.target.value;
+    if (isComposing) return; // IME変換中はスキップ
+    const value = hiddenInput.value;
     if (value.length > 0) {
-      game.handleKeypress(value.slice(-1).toLowerCase());
+      // 入力された全文字を処理（複数文字が一度に入ることがある）
+      for (const ch of value) {
+        if (/^[a-zA-Z ]$/.test(ch)) {
+          game.handleKeypress(ch.toLowerCase());
+        }
+      }
       hiddenInput.value = "";
     }
   });
 
-  // ゲームエリアクリック/タッチでモバイルキーボード表示
-  document.getElementById("gameArea").addEventListener("click", () => {
-    game.focusInput();
+  // キーボード表示/非表示の検出（タップヒント制御）
+  hiddenInput.addEventListener("focus", () => {
+    if (tapHint) tapHint.style.display = "none";
+  });
+  hiddenInput.addEventListener("blur", () => {
+    if (tapHint && isGameScreen) tapHint.style.display = "";
   });
 
-  document.getElementById("gameArea").addEventListener("touchstart", () => {
-    game.focusInput();
+  // ゲームエリアタッチ/クリックでモバイルキーボード表示（iOS: touchend内でfocus必須）
+  document.getElementById("gameArea").addEventListener("touchend", (e) => {
+    if (!isGameScreen) return;
+    e.preventDefault(); // ゴーストクリック防止
+    hiddenInput.focus(); // ユーザーアクション内で直接focus（iOS必須）
+  });
+
+  document.getElementById("gameArea").addEventListener("click", () => {
+    if (!isGameScreen) return;
+    hiddenInput.focus();
   });
 });

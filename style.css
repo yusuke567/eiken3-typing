@@ -344,13 +344,41 @@ body {
   width: 0%;
 }
 
-/* ========== 非表示インプット ========== */
+/* ========== タップヒント（モバイル用） ========== */
+.tap-hint {
+  display: none;
+  font-size: 14px;
+  color: #c0a0b0;
+  margin-top: 12px;
+  animation: tapPulse 2s ease-in-out infinite;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .tap-hint {
+    display: block;
+  }
+}
+
+@keyframes tapPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ========== 非表示インプット（iOS対応） ========== */
 #hiddenInput {
-  position: absolute;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 44px;
   opacity: 0;
-  width: 1px;
-  height: 1px;
-  pointer-events: none;
+  z-index: -1;
+  font-size: 16px; /* iOS: 16px未満だとズームされる */
+  -webkit-appearance: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  caret-color: transparent;
 }
 
 /* ========== 結果画面 ========== */
