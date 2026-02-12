@@ -34,26 +34,26 @@
       <span id="timerDisplay" class="timer-text">30秒</span>
     </div>
 
-    <main id="gameArea">
+    <label for="hiddenInput" id="gameArea">
       <div id="emojiDisplay" class="emoji-area"></div>
       <div id="japaneseHint" class="japanese-hint"></div>
       <div id="letterBoxes" class="letter-boxes"></div>
+      <input type="text" id="hiddenInput"
+             autocomplete="off" autocapitalize="none"
+             autocorrect="off" spellcheck="false"
+             inputmode="latin"
+             enterkeyhint="next"
+             aria-label="タイピング入力">
       <div id="feedback" class="feedback-text"></div>
       <div id="scorePopup" class="score-popup"></div>
       <div id="tapHint" class="tap-hint">👆 ここをタップしてキーボードを出してね</div>
-    </main>
+    </label>
 
     <div class="progress-bar-container">
       <div id="progressBar" class="progress-bar">
         <div id="progressFill" class="progress-fill"></div>
       </div>
     </div>
-
-    <input type="text" id="hiddenInput"
-           autocomplete="off" autocapitalize="none"
-           autocorrect="off" spellcheck="false"
-           inputmode="latin"
-           aria-label="タイピング入力">
   </div>
 
   <!-- 結果画面 -->
