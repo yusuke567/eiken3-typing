@@ -255,6 +255,12 @@ body {
   color: #e0dde5;
 }
 
+.letter-box.space-box {
+  width: clamp(16px, 4vw, 24px);
+  border: none;
+  background: transparent;
+}
+
 .letter-box.hint {
   background: #e8f4fd;
   border: 2px solid #b8d4e3;

@@ -59,6 +59,28 @@ const WORDS = [
   { word: "opinion", japanese: "意見", emoji: "🗨️", category: "communication" },
   { word: "promise", japanese: "約束", emoji: "🤝", category: "communication" },
   { word: "introduce", japanese: "紹介する", emoji: "👋", category: "communication" },
+
+  // 英熟語
+  { word: "look forward to", japanese: "〜を楽しみにする", emoji: "🤗", category: "phrase" },
+  { word: "take care of", japanese: "〜の世話をする", emoji: "🤲", category: "phrase" },
+  { word: "be interested in", japanese: "〜に興味がある", emoji: "🧐", category: "phrase" },
+  { word: "be good at", japanese: "〜が得意だ", emoji: "💪", category: "phrase" },
+  { word: "get along with", japanese: "〜と仲良くする", emoji: "🤝", category: "phrase" },
+  { word: "give up", japanese: "あきらめる", emoji: "🏳️", category: "phrase" },
+  { word: "pick up", japanese: "拾う・迎えに行く", emoji: "🫳", category: "phrase" },
+  { word: "put on", japanese: "着る・身につける", emoji: "👗", category: "phrase" },
+  { word: "take off", japanese: "脱ぐ・離陸する", emoji: "🛫", category: "phrase" },
+  { word: "turn off", japanese: "消す・止める", emoji: "📴", category: "phrase" },
+  { word: "turn on", japanese: "つける", emoji: "💡", category: "phrase" },
+  { word: "look for", japanese: "〜を探す", emoji: "🔍", category: "phrase" },
+  { word: "run out of", japanese: "〜を切らす", emoji: "😱", category: "phrase" },
+  { word: "get up", japanese: "起きる", emoji: "⏰", category: "phrase" },
+  { word: "come back", japanese: "戻る", emoji: "🔙", category: "phrase" },
+  { word: "find out", japanese: "見つけ出す", emoji: "🕵️", category: "phrase" },
+  { word: "hand in", japanese: "提出する", emoji: "📤", category: "phrase" },
+  { word: "belong to", japanese: "〜に所属する", emoji: "🏠", category: "phrase" },
+  { word: "depend on", japanese: "〜による", emoji: "⚖️", category: "phrase" },
+  { word: "agree with", japanese: "〜に賛成する", emoji: "👍", category: "phrase" },
 ];
 
 // ========== フィードバックメッセージ ==========
@@ -285,7 +307,6 @@ class Game {
 
   loadWord() {
     const word = this.words[this.currentIndex];
-    this.currentLetterPos = 1; // 1文字目はヒントとして表示済み
     this.wrongAttemptsThisWord = 0;
     this.hintUsedThisWord = false;
     this.wordStartTime = Date.now();
@@ -309,25 +330,36 @@ class Game {
     // 文字ボックス生成
     this.els.letterBoxes.innerHTML = "";
     for (let i = 0; i < word.word.length; i++) {
+      const char = word.word[i];
+      const isSpace = char === " ";
+
       const box = document.createElement("div");
       box.className = "letter-box";
       box.dataset.index = i;
 
-      if (i === 0) {
+      if (isSpace) {
+        // スペースは自動的に埋める（入力不要）
+        box.classList.add("space-box");
+        box.textContent = " ";
+      } else if (i === 0) {
         // 1文字目はヒント
         box.classList.add("hint");
-        box.textContent = word.word[0];
+        box.textContent = char;
       } else {
         // 2文字目以降は薄く答えの文字を表示
-        box.textContent = word.word[i];
+        box.textContent = char;
         box.classList.add("ghost-letter");
-        if (i === 1) {
-          // 2文字目（次に入力する文字）をアクティブに
-          box.classList.add("active");
-        }
       }
 
       this.els.letterBoxes.appendChild(box);
+    }
+
+    // 最初のアクティブ文字を設定（スペースをスキップ）
+    this.currentLetterPos = 1;
+    this.skipSpaces();
+    if (this.currentLetterPos < word.word.length) {
+      const boxes = this.els.letterBoxes.children;
+      boxes[this.currentLetterPos].classList.add("active");
     }
 
     // ネイティブ発音: 英語 → 日本語の意味（発音終了後にフォーカス復帰）
@@ -386,7 +418,9 @@ class Game {
     for (let i = this.currentLetterPos; i < currentWord.word.length; i++) {
       boxes[i].textContent = currentWord.word[i];
       boxes[i].classList.remove("active", "ghost-letter");
-      boxes[i].classList.add("timeout");
+      if (currentWord.word[i] !== " ") {
+        boxes[i].classList.add("timeout");
+      }
     }
 
     this.showFeedback("⏰ 時間切れ！", "#ff8b94");
@@ -427,7 +461,7 @@ class Game {
   }
 
   handleKeypress(key) {
-    if (!/^[a-z]$/.test(key)) return;
+    if (!/^[a-z ]$/.test(key)) return;
 
     this.totalKeystrokes++;
     const currentWord = this.words[this.currentIndex];
@@ -446,6 +480,9 @@ class Game {
       box.classList.add("correct");
 
       this.currentLetterPos++;
+
+      // スペースをスキップ
+      this.skipSpaces();
 
       // 次の文字ボックスをアクティブに
       if (this.currentLetterPos < currentWord.word.length) {
@@ -690,6 +727,17 @@ class Game {
     this.showScreen(this.els.gameOverScreen);
   }
 
+  // スペースをスキップして次の入力位置に進む
+  skipSpaces() {
+    const currentWord = this.words[this.currentIndex];
+    while (this.currentLetterPos < currentWord.word.length && currentWord.word[this.currentLetterPos] === " ") {
+      const boxes = this.els.letterBoxes.children;
+      boxes[this.currentLetterPos].classList.add("correct", "space-box");
+      boxes[this.currentLetterPos].classList.remove("ghost-letter");
+      this.currentLetterPos++;
+    }
+  }
+
   // ========== 復習用単語取得 ==========
 
   getReviewWords() {
@@ -797,9 +845,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // PC向け: documentレベルでキーボード入力をキャプチャ（フォーカス不要）
   document.addEventListener("keydown", (e) => {
     if (!isGameScreen) return;
-    if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
+    if (e.key === " " || (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key))) {
       e.preventDefault();
-      game.handleKeypress(e.key.toLowerCase());
+      game.handleKeypress(e.key === " " ? " " : e.key.toLowerCase());
     }
   });
 
