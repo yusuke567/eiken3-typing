@@ -891,4 +891,14 @@ document.addEventListener("DOMContentLoaded", () => {
   hiddenInput.addEventListener("blur", () => {
     if (tapHint && isGameScreen) tapHint.style.display = "";
   });
+
+  // iOS Chrome対応: labelのfor属性だけではキーボードが出ないため、
+  // gameAreaのtouchendで直接focusする
+  document.getElementById("gameArea").addEventListener("touchend", (e) => {
+    if (!isGameScreen) return;
+    // ボタン等のタッチは除外
+    if (e.target.tagName === "BUTTON" || e.target.tagName === "A") return;
+    e.preventDefault();
+    hiddenInput.focus();
+  });
 });

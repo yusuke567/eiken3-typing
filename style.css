@@ -170,6 +170,7 @@ body {
   padding: 20px;
   position: relative;
   cursor: text;
+  overflow: hidden;
 }
 
 /* ========== タイマー ========== */
@@ -364,24 +365,20 @@ body {
   50% { opacity: 1; }
 }
 
-/* ========== 入力フィールド（iOS対応） ========== */
+/* ========== 入力フィールド（iOS Safari/Chrome対応） ========== */
 #hiddenInput {
-  display: block;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px 0 0 0;
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 100px;
+  height: 44px;
+  font-size: 16px; /* iOS: 16px未満だとズームされる */
+  opacity: 1;
   border: none;
   outline: none;
-  background: transparent;
-  color: transparent;
-  caret-color: transparent;
-  font-size: 16px; /* iOS: 16px未満だとズームされる */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  position: relative;
-  overflow: hidden;
 }
 
 /* ========== 結果画面 ========== */
