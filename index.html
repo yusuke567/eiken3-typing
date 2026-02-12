@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英検3級 タイピング</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- スタート画面 -->
+  <div id="startScreen" class="screen active">
+    <div class="start-card">
+      <div class="start-emoji">🌸✨📝</div>
+      <h1>英検3級<br>タイピング</h1>
+      <p class="subtitle">絵文字を<ruby>見<rp>(</rp><rt>み</rt><rp>)</rp></ruby>て、英単語をタイプしよう！</p>
+      <p class="hint-text">💡 1<ruby>文字目<rp>(</rp><rt>もじめ</rt><rp>)</rp></ruby>がヒントだよ</p>
+      <button id="startBtn" class="btn-primary bounce">スタート</button>
+    </div>
+  </div>
+
+  <!-- ゲーム画面 -->
+  <div id="gameScreen" class="screen">
+    <header id="scoreBar">
+      <div class="score-display">⭐ <span id="scoreValue">0</span><ruby>点<rp>(</rp><rt>てん</rt><rp>)</rp></ruby></div>
+      <div class="streak-display" id="streakDisplay"></div>
+      <div class="progress-display"><ruby>問題<rp>(</rp><rt>もんだい</rt><rp>)</rp></ruby> <span id="progressText">1/20</span></div>
+    </header>
+
+    <div class="timer-container">
+      <div class="timer-bar">
+        <div id="timerFill" class="timer-fill"></div>
+      </div>
+      <span id="timerDisplay" class="timer-text">30秒</span>
+    </div>
+
+    <main id="gameArea">
+      <div id="emojiDisplay" class="emoji-area"></div>
+      <div id="japaneseHint" class="japanese-hint"></div>
+      <div id="letterBoxes" class="letter-boxes"></div>
+      <div id="feedback" class="feedback-text"></div>
+      <div id="scorePopup" class="score-popup"></div>
+    </main>
+
+    <div class="progress-bar-container">
+      <div id="progressBar" class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <input type="text" id="hiddenInput"
+           autocomplete="off" autocapitalize="none"
+           autocorrect="off" spellcheck="false"
+           inputmode="text"
+           aria-label="タイピング入力">
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="gameOverScreen" class="screen">
+    <div class="result-card">
+      <h2>🎉 <ruby>結果発表<rp>(</rp><rt>けっかはっぴょう</rt><rp>)</rp></ruby>！</h2>
+      <div id="finalScore" class="final-score"></div>
+      <div id="finalStats" class="final-stats"></div>
+      <div id="scoreBreakdown" class="score-breakdown"></div>
+      <div id="wordDetail" class="word-detail"></div>
+      <div id="reviewSection" class="review-section"></div>
+      <div class="retry-buttons">
+        <button id="retryBtn" class="btn-primary bounce">にがて問題を練習する！</button>
+        <button id="fullRetryBtn" class="btn-secondary">全問チャレンジ！</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

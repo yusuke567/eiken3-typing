@@ -1,0 +1,708 @@
+/* ========== リセット・ベース ========== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  background: #fff0f5;
+  color: #333;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========== 画面切替 ========== */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ========== スタート画面 ========== */
+.start-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(255, 133, 162, 0.15);
+}
+
+.start-emoji {
+  font-size: 48px;
+  margin-bottom: 16px;
+  letter-spacing: 8px;
+}
+
+.start-card h1 {
+  font-size: 32px;
+  color: #ff85a2;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.hint-text {
+  font-size: 14px;
+  color: #b8d4e3;
+  margin-bottom: 28px;
+}
+
+/* ========== ボタン ========== */
+.btn-primary {
+  background: linear-gradient(135deg, #ff85a2, #ffb3c6);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(255, 133, 162, 0.3);
+  letter-spacing: 2px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 133, 162, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 133, 162, 0.3);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #ff85a2;
+  border: 2px solid #ffcdd9;
+  border-radius: 50px;
+  padding: 12px 36px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  letter-spacing: 1px;
+}
+
+.btn-secondary:hover {
+  background: #fff5f7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 133, 162, 0.15);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.retry-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ========== ゲーム画面 ========== */
+#gameScreen {
+  justify-content: flex-start;
+  padding-top: 0;
+}
+
+#scoreBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.score-display {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffb347;
+}
+
+.streak-display {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff85a2;
+  min-width: 80px;
+  text-align: center;
+}
+
+.progress-display {
+  font-size: 14px;
+  color: #999;
+}
+
+#gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  position: relative;
+  cursor: text;
+}
+
+/* ========== タイマー ========== */
+.timer-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  padding: 12px 20px 0;
+}
+
+.timer-bar {
+  flex: 1;
+  height: 8px;
+  background: #f0e0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5ec49e, #b8d4e3);
+  border-radius: 4px;
+  transition: width 1s linear;
+  width: 100%;
+}
+
+.timer-fill.timer-danger {
+  background: linear-gradient(90deg, #ff8b94, #ffb347);
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+.timer-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #999;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ========== 絵文字表示 ========== */
+.emoji-area {
+  font-size: clamp(60px, 15vw, 120px);
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ========== 日本語ヒント ========== */
+.japanese-hint {
+  font-size: 20px;
+  color: #888;
+  margin-bottom: 28px;
+}
+
+/* ========== 文字ボックス ========== */
+.letter-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.letter-box {
+  width: clamp(28px, 8vw, 44px);
+  height: clamp(36px, 10vw, 56px);
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+  text-transform: lowercase;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.letter-box.ghost-letter {
+  color: #e0dde5;
+}
+
+.letter-box.hint {
+  background: #e8f4fd;
+  border: 2px solid #b8d4e3;
+  color: #5a9cc5;
+}
+
+.letter-box.correct {
+  background: #e0f5ec;
+  border: 2px solid #5ec49e;
+  color: #2d8a5e;
+  animation: popIn 0.3s ease;
+}
+
+.letter-box.wrong {
+  animation: shake 0.4s ease;
+  border-color: #ff8b94;
+  background: #fff0f0;
+}
+
+.letter-box.active {
+  border-color: #ff85a2;
+  border-style: solid;
+  box-shadow: 0 0 8px rgba(255, 133, 162, 0.3);
+}
+
+.letter-box.extra-hint {
+  background: #fff8e1;
+  border: 2px solid #ffb347;
+  color: #e09600;
+}
+
+.letter-box.timeout {
+  background: #f5f5f5;
+  border: 2px solid #ccc;
+  color: #999;
+}
+
+/* ========== フィードバック ========== */
+.feedback-text {
+  font-size: 20px;
+  font-weight: bold;
+  min-height: 32px;
+  color: #ff85a2;
+  text-align: center;
+}
+
+/* ========== スコアポップアップ ========== */
+.score-popup {
+  position: absolute;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffb347;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.score-popup.show {
+  animation: floatUp 1s ease-out forwards;
+}
+
+/* ========== プログレスバー ========== */
+.progress-bar-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #f0e0f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c3aed6, #ff85a2);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ========== 非表示インプット ========== */
+#hiddenInput {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* ========== 結果画面 ========== */
+.result-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 36px 28px;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(255, 133, 162, 0.15);
+}
+
+.result-card h2 {
+  font-size: 28px;
+  color: #ff85a2;
+  margin-bottom: 20px;
+}
+
+.final-score {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffb347;
+  margin-bottom: 20px;
+}
+
+.final-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-item {
+  background: #fef0f5;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* ========== 復習セクション ========== */
+.review-section {
+  margin-bottom: 24px;
+}
+
+.review-title {
+  font-size: 16px;
+  color: #ff85a2;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.review-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.review-word {
+  background: #fff5f7;
+  border: 1px solid #ffcdd9;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 14px;
+  color: #d4687a;
+}
+
+/* ========== 前回比の差分バッジ ========== */
+.diff-up {
+  display: inline-block;
+  font-size: 14px;
+  color: #5ec49e;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.diff-down {
+  display: inline-block;
+  font-size: 14px;
+  color: #ff8b94;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.diff-same {
+  display: inline-block;
+  font-size: 14px;
+  color: #ccc;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* ========== 得点の内訳 ========== */
+.score-breakdown {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.breakdown-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff85a2;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.breakdown-summary {
+  background: #fef8fa;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #f5e8ed;
+}
+
+.breakdown-row:last-child {
+  border-bottom: none;
+}
+
+.breakdown-row.breakdown-total {
+  border-top: 2px solid #ffd6e0;
+  margin-top: 4px;
+  padding-top: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.breakdown-label {
+  color: #888;
+}
+
+.breakdown-value {
+  color: #555;
+  font-weight: bold;
+}
+
+.breakdown-value.positive {
+  color: #5ec49e;
+}
+
+.breakdown-value.negative {
+  color: #ff8b94;
+}
+
+/* ========== 単語ごとの結果 ========== */
+.word-detail {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.detail-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff85a2;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.word-list-detail {
+  max-height: 240px;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: #fef8fa;
+}
+
+.word-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #f5e8ed;
+}
+
+.word-row:last-child {
+  border-bottom: none;
+}
+
+.word-row-perfect {
+  background: #f0faf5;
+}
+
+.word-row-timeout {
+  background: #faf0f0;
+}
+
+.word-num {
+  color: #ccc;
+  font-size: 11px;
+  min-width: 18px;
+}
+
+.word-emoji {
+  font-size: 16px;
+}
+
+.word-name {
+  font-weight: bold;
+  color: #555;
+  min-width: 80px;
+}
+
+.word-jp {
+  color: #999;
+  font-size: 11px;
+  flex: 1;
+}
+
+.word-status {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.perfect-badge {
+  background: #e0f5ec;
+  color: #2d8a5e;
+}
+
+.miss-badge {
+  background: #fff3e0;
+  color: #e09600;
+}
+
+.hint-badge {
+  background: #fff0f0;
+  color: #d4687a;
+}
+
+.timeout-badge {
+  background: #f0f0f0;
+  color: #999;
+}
+
+.word-score {
+  font-weight: bold;
+  color: #ffb347;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ========== アニメーション ========== */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-60px); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+.bounce {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.bounce:hover {
+  animation: none;
+}
+
+/* キラキラエフェクト */
+.sparkle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.sparkle-star {
+  position: absolute;
+  font-size: 24px;
+  animation: sparkle 0.8s ease-out forwards;
+}
+
+/* ========== レスポンシブ ========== */
+@media (max-width: 480px) {
+  .start-card {
+    padding: 28px 20px;
+  }
+
+  .start-card h1 {
+    font-size: 26px;
+  }
+
+  #scoreBar {
+    padding: 12px 16px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .score-display {
+    font-size: 15px;
+  }
+
+  .japanese-hint {
+    font-size: 17px;
+  }
+
+  .feedback-text {
+    font-size: 17px;
+  }
+
+  .result-card {
+    padding: 28px 20px;
+  }
+
+  .final-score {
+    font-size: 36px;
+  }
+}
