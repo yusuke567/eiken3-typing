@@ -341,21 +341,16 @@ class Game {
         // スペースは自動的に埋める（入力不要）
         box.classList.add("space-box");
         box.textContent = " ";
-      } else if (i === 0) {
-        // 1文字目はヒント
-        box.classList.add("hint");
-        box.textContent = char;
       } else {
-        // 2文字目以降は薄く答えの文字を表示
-        box.textContent = char;
-        box.classList.add("ghost-letter");
+        // 空ボックス（ヒントなし）
+        box.textContent = "";
       }
 
       this.els.letterBoxes.appendChild(box);
     }
 
     // 最初のアクティブ文字を設定（スペースをスキップ）
-    this.currentLetterPos = 1;
+    this.currentLetterPos = 0;
     this.skipSpaces();
     if (this.currentLetterPos < word.word.length) {
       const boxes = this.els.letterBoxes.children;
@@ -415,7 +410,7 @@ class Game {
     // 残りの文字をすべて表示（不正解として）
     for (let i = this.currentLetterPos; i < currentWord.word.length; i++) {
       boxes[i].textContent = currentWord.word[i];
-      boxes[i].classList.remove("active", "ghost-letter");
+      boxes[i].classList.remove("active");
       if (currentWord.word[i] !== " ") {
         boxes[i].classList.add("timeout");
       }
@@ -474,7 +469,7 @@ class Game {
       // 文字ボックスを埋める
       const box = boxes[this.currentLetterPos];
       box.textContent = key;
-      box.classList.remove("active", "extra-hint", "ghost-letter");
+      box.classList.remove("active", "extra-hint");
       box.classList.add("correct");
 
       this.currentLetterPos++;
@@ -731,7 +726,6 @@ class Game {
     while (this.currentLetterPos < currentWord.word.length && currentWord.word[this.currentLetterPos] === " ") {
       const boxes = this.els.letterBoxes.children;
       boxes[this.currentLetterPos].classList.add("correct", "space-box");
-      boxes[this.currentLetterPos].classList.remove("ghost-letter");
       this.currentLetterPos++;
     }
   }
